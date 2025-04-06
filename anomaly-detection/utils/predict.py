@@ -48,7 +48,7 @@ def predict_anomalies(result_file : str) -> pd.DataFrame:
     preds = svm_model.predict(X_scaled)
     probs = svm_model.predict_proba(X_scaled)[:, 1]
     
-    df['Prediction'] = preds
+    df['Anomaly'] = preds
     df['Anomaly_Probability'] = probs
     
     return df

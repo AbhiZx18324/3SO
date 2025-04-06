@@ -34,7 +34,7 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
     ml_df = pd.read_csv(ML_ANOMALIES_FILE, parse_dates=["Datetime"])
 
     st.subheader("🔍 Machine Learning Predicted Anomalies")
-    filtered = ml_df[ml_df["Prediction"] == 1].reset_index(drop=True)
+    filtered = ml_df[ml_df["Anomaly"] == 1].reset_index(drop=True)
 
     if filtered.empty:
         st.info("🎉 No anomalies were predicted by the model.")
@@ -50,10 +50,14 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     index=0
                 )
                 filtered.at[idx, "Expert_Verification"] = choice
+                if choice == "True Threat":
+                    row['Anomaly'] = True
+                elif choice == "False Positive":
+                    row['Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies"):
-            filtered.to_csv("verified_anomalies.csv", index=False)
-            st.success("✅ Saved to verified_anomalies.csv")
+            filtered.to_csv("ml_verified_anomalies.csv", index=False)
+            st.success("✅ Saved to ml_verified_anomalies.csv")
 
     st.subheader("🔍 Rule Based Predicted Anomalies")
     filtered = rb_df[rb_df["Anomaly"] == True].reset_index(drop=True)
@@ -68,14 +72,18 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                 choice = st.radio(
                     "🧐 Expert decision for this anomaly:",
                     ["Unverified", "True Threat", "False Positive", "Unsure"],
-                    key=idx,
+                    key=idx + len(ml_df),
                     index=0
                 )
                 filtered.at[idx, "Expert_Verification"] = choice
+                if choice == "True Threat":
+                    row['Anomaly'] = True
+                elif choice == "False Positive":
+                    row['Anomaly'] = False
 
-        if st.button("💾 Save Verified Anomalies"):
-            filtered.to_csv("verified_anomalies.csv", index=False)
-            st.success("✅ Saved to verified_anomalies.csv")
+        if st.button("💾 Save Verified Anomalies", key = len(ml_df) + len(rb_df)):
+            filtered.to_csv("rb_verified_anomalies.csv", index=False)
+            st.success("✅ Saved to rb_verified_anomalies.csv")
 
 else:
     st.warning("⚠️ Please run the anomaly detection pipeline to generate CSVs.")
