@@ -2,14 +2,20 @@ import os
 from utils.detectorRB import detect_anomalies_RB
 from utils.flag_anomaly import or_based, and_based
 from utils.savefile import savefile
+from utils.predict import predict_anomalies
 
 RULES_FILE = os.getenv("RULES_FILE", "rules.txt")
 LOG_FILE = os.getenv("LOG_FILE", "data/test_log.csv")
 RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/test_results.csv")
-ANOMALIES_FILE = os.getenv("ANOMALIES_FILE", "data/anomalies.csv")
+RB_ANOMALIES_FILE = os.getenv("RB_ANOMALIES_FILE", "data/rb_anomalies.csv")
+ML_ANOMALIES_FILE = os.getenv("ML_ANOMALIES_FILE", "data/ml_anomalies.csv")
 
-RBtest_result = detect_anomalies_RB(LOG_FILE, RULES_FILE)
-savefile(RBtest_result, RB_RESULT_FILE)
+def routine():
+    RBtest_result = detect_anomalies_RB(LOG_FILE, RULES_FILE)
+    savefile(RBtest_result, RB_RESULT_FILE)
 
-anomaly_df = or_based(RB_RESULT_FILE)
-savefile(anomaly_df, ANOMALIES_FILE)
+    rb_anomaly_df = or_based(RB_RESULT_FILE)
+    savefile(rb_anomaly_df, RB_ANOMALIES_FILE)
+
+    ml_anomaly_df = predict_anomalies(RB_RESULT_FILE)
+    savefile(ml_anomaly_df, ML_ANOMALIES_FILE)

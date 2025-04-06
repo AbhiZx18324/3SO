@@ -15,7 +15,7 @@ def generate_anomaly_detection_df(num_rows=100):
     users = [f"{np.random.choice(['J', 'S', 'A', 'B'])}{np.random.randint(100, 999)}" for _ in range(num_rows)]
     ids = np.random.randint(10000, 99999, num_rows)
     processes = ['Login'] * num_rows
-    fkl_processes = np.random.randint(0, 20, num_rows)
+    fkl_processes = np.random.randint(0, 2, num_rows)
 
     df = pd.DataFrame({
         'Date': dates,
@@ -36,17 +36,17 @@ def generate_anomaly_detection_df(num_rows=100):
     for i in anomaly_indices:
         if i % 2 ==0: #make some of the anomalies fit the rules.
             df.loc[i, 'User'] = f"J{np.random.randint(100, 999)}"
-            df.loc[i, 'FKL_Process'] = np.random.randint(8, 17)
+            df.loc[i, 'FKL_Process'] = 0
             df.loc[i, 'Time'] = time(np.random.randint(20, 24), np.random.randint(0, 60), np.random.randint(0, 60))
         else: #make some of the anomalies not fit the rules.
             df.loc[i, 'User'] = f"C{np.random.randint(100, 999)}"
-            df.loc[i, 'FKL_Process'] = np.random.randint(0, 8)
+            df.loc[i, 'FKL_Process'] = 1
             df.loc[i, 'Time'] = time(np.random.randint(10, 18), np.random.randint(0, 60), np.random.randint(0, 60))
     #add login reset anomalies.
     reset_anomaly_indices = np.random.choice(num_rows, int(num_rows * 0.05), replace=False) #5 percent reset anomalies.
     for i in reset_anomaly_indices:
         df.loc[i, 'User'] = f"S{np.random.randint(100, 999)}"
-        df.loc[i, 'FKL_Process'] = np.random.randint(8, 17)
+        df.loc[i, 'FKL_Process'] = 0
         df.loc[i, 'Time'] = time(np.random.randint(20, 24), np.random.randint(0, 60), np.random.randint(0, 60))
         df.loc[i, 'Date'] = df.loc[i, 'Date'] - timedelta(days=1)
 
@@ -57,7 +57,7 @@ def generate_anomaly_detection_df(num_rows=100):
 
     return df
 
-df = generate_anomaly_detection_df(100000)
+df = generate_anomaly_detection_df(1000)
 filepath = "data/test_log.csv"
 
 try:
