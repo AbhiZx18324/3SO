@@ -10,7 +10,8 @@ RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/test_results.csv")
 RB_ANOMALIES_FILE = os.getenv("RB_ANOMALIES_FILE", "data/rb_anomalies.csv")
 ML_ANOMALIES_FILE = os.getenv("ML_ANOMALIES_FILE", "data/ml_anomalies.csv")
 
-def routine():
+def routine(RULES_FILE : str = RULES_FILE, LOG_FILE : str = LOG_FILE, RB_RESULT_FILE : str = RB_RESULT_FILE, 
+            RB_ANOMALIES_FILE : str = RB_ANOMALIES_FILE, ML_ANOMALIES_FILE : str = ML_ANOMALIES_FILE):
     RBtest_result = detect_anomalies_RB(LOG_FILE, RULES_FILE)
     savefile(RBtest_result, RB_RESULT_FILE)
 
