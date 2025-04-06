@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSO Client Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+    .client-card {
+      border: 2px solid #ccc;
+      border-left: 10px solid transparent;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+    }
+    .logged-in {
+      border-left-color: green;
+      background-color: #e6ffe6;
+    }
+    .logged-out {
+      border-left-color: red;
+      background-color: #ffe6e6;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      background-color: #333;
+      color: white;
+      border-radius: 3px;
+    }
+    button.login {
+      background-color: #007bff;
+    }
+    button.logout {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <h1>Client Status Dashboard</h1>
+  <% clients.forEach(client => { %>
+    <div class="client-card <%= client.isLoggedIn ? 'logged-in' : 'logged-out' %>">
+      <h2><%= client.name %> (<%= client.id %>)</h2>
+      <p>Status: <strong><%= client.isLoggedIn ? 'Logged In' : 'Logged Out' %></strong></p>
+      <% if (client.isLoggedIn) { %>
+        <form action="<%= client.redirectUri + '/logout' %>" method="GET" style="display:inline;">
+            <input type="hidden" name="client_id" value="<%= client.id %>">
+            <button class="logout">Logout</button>
+          </form>
+          <% } else { %>
+          <form action="<%= client.redirectUri %>" method="GET" style="display:inline;">
+            <button class="login">Login</button>
+          </form>
+      <% } %>
+    </div>
+  <% }); %>
+</body>
+</html>
