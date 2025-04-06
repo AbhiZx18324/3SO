@@ -1,6 +1,6 @@
 import os
 from utils.detectorRB import detect_anomalies_RB
-from utils.flag_anomaly import or_based
+from utils.flag_anomaly import or_based, and_based
 from utils.savefile import savefile
 
 RULES_FILE = os.getenv("RULES_FILE", "rules.txt")

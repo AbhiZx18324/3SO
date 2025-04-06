@@ -6,7 +6,11 @@ def generate_anomaly_detection_df(num_rows=100):
     """
     Generates a DataFrame for testing an anomaly detection system.
     """
-    dates = pd.to_datetime(['2023-11-15'] * num_rows)
+    dates = pd.to_datetime([datetime(2023, np.random.randint(1,12), 
+                                            np.random.randint(1, 28),
+                                            np.random.randint(0, 24),
+                                            np.random.randint(0, 60),
+                                            np.random.randint(0, 60)) for _ in range(num_rows)])
     times = pd.to_timedelta(np.random.randint(0, 24 * 60 * 60, num_rows), unit='s')
     users = [f"{np.random.choice(['J', 'S', 'A', 'B'])}{np.random.randint(100, 999)}" for _ in range(num_rows)]
     ids = np.random.randint(10000, 99999, num_rows)
@@ -53,7 +57,7 @@ def generate_anomaly_detection_df(num_rows=100):
 
     return df
 
-df = generate_anomaly_detection_df(1000)
+df = generate_anomaly_detection_df(100000)
 filepath = "data/test_log.csv"
 
 try:
