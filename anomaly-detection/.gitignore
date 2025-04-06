@@ -3,3 +3,4 @@ __pycache__/
 rule_engine/__pycache__/
 test_log.csv
 test_results.csv
+anomalies.csv
