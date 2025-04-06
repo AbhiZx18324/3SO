@@ -1,7 +1,7 @@
 import os
-from detectorRB import detect_anomalies_RB
-from flag_anomaly import or_based
-from savefile import savefile
+from utils.detectorRB import detect_anomalies_RB
+from utils.flag_anomaly import or_based
+from utils.savefile import savefile
 
 RULES_FILE = os.getenv("RULES_FILE", "rules.txt")
 LOG_FILE = os.getenv("LOG_FILE", "data/test_log.csv")
