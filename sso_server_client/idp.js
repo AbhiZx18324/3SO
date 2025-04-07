@@ -87,7 +87,7 @@ const storeTokenInRedis = async (key, value, expiryInSeconds) => {
   console.log("store token in redis function");
   console.log(`Storing key: ${key} with TTL: ${expiryInSeconds}`);
   try {
-    await redisClient.set(key, JSON.stringify(value), 'EX', expiryInSeconds);
+    await redisClient.set(key, JSON.stringify(value), "EX", expiryInSeconds);
     console.log(`Stored key ${key} with TTL ${expiryInSeconds}`);
   } catch (err) {
     console.error("Redis store error:", err);
@@ -140,7 +140,9 @@ app.set("view engine", "ejs");
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     const user = users[email];
-    if (!user) return done(null, false, { message: "User not found" });
+    if (!user) {
+      return done(null, false, { message: "User not found" });
+    }
     if (user.password !== password)
       return done(null, false, { message: "Incorrect password" });
     return done(null, user);
@@ -199,7 +201,7 @@ app.get("/login", (req, res) => {
   }
 
   // If user already logged in, redirect to callback with code
-  console.log("printing req object",req);
+  // console.log("printing req object", req);
   if (req.isAuthenticated()) {
     if (client_id && redirect_uri) {
       const authCode = uuidv4();
@@ -236,9 +238,27 @@ app.post("/login", (req, res, next) => {
   console.log("login form submit ho gya h");
   const { client_id, redirect_uri, state } = req.query;
 
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user)
+  passport.authenticate("local", async (err, user, info) => {
+    console.log("local ke andar ");
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      const loginInfo = {
+        Datetime: new Date().toISOString().replace("T", " ").slice(0, 19),
+        User: req.body.username || req.body.email || "unknown", // Use submitted credentials
+        ID: null, // No user ID available
+        Process: "Login",
+        FKL_Process: 0, // Failed login
+      };
+
+      try {
+        await redisClient.lpush("logins", JSON.stringify(loginInfo));
+        console.log("Logged failed loginInfo to Redis:", loginInfo);
+      } catch (redisErr) {
+        console.error("Redis error:", redisErr);
+      }
+
       return res.render("login", {
         error: info.message,
         title: "SSO Login",
@@ -246,9 +266,13 @@ app.post("/login", (req, res, next) => {
         redirectUri: redirect_uri,
         state: state,
       });
+    }
 
     req.login(user, async (loginErr) => {
-      if (loginErr) return next(loginErr);
+      console.log("login ke andar");
+      if (loginErr) {
+        return next(loginErr);
+      }
 
       // Create global session record in Redis
       const globalSessionId = uuidv4();
@@ -264,6 +288,16 @@ app.post("/login", (req, res, next) => {
         SESSION_TTL
       );
       console.log("store token in redis me dikkat h ka=ya");
+      const loginInfo = {
+        Datetime: new Date().toISOString().replace("T", " ").slice(0, 19),
+        User: user.email,
+        ID: user.id,
+        Process: "Login",
+        FKL_Process: 1,
+      };
+
+      await redisClient.lpush("logins", JSON.stringify(loginInfo));
+      console.log("Logged loginInfo to Redis:", loginInfo);
 
       if (client_id && redirect_uri) {
         // Create auth code for redirect
@@ -285,6 +319,7 @@ app.post("/login", (req, res, next) => {
         console.log(
           "log in ho chuka h auth code, global session token store kar liya h ab client pr jarhe h"
         );
+
         return res.redirect(
           `${redirect_uri}?code=${authCode}&state=${state || ""}`
         );
@@ -293,6 +328,18 @@ app.post("/login", (req, res, next) => {
       res.redirect("/profile");
     });
   })(req, res, next);
+});
+
+app.get("/admin/logins", async (req, res) => {
+  try {
+    const rawLogs = await redisClient.lrange("logins", 0, -1); // latest 100
+    const logs = rawLogs.map(JSON.parse);
+    console.log("these are logs", logs);
+    res.json(logs);
+  } catch (error) {
+    console.error("Redis fetch error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Exchange auth code for token
@@ -335,7 +382,7 @@ app.post("/token", async (req, res) => {
   const globalSession = await getTokenFromRedis(`global_session_${user.id}`);
   if (globalSession) {
     globalSession.loggedInApps[client_id] = true;
-    console.log("this is global session",globalSession);
+    console.log("this is global session", globalSession);
     await storeTokenInRedis(
       `global_session_${user.id}`,
       globalSession,
@@ -378,7 +425,8 @@ app.post("/token", async (req, res) => {
       clientId: client_id,
       tokenId,
     },
-    30 * 24 * 60 * 60
+    // 30 * 24 * 60 * 60
+    24 * 60 * 60
   ); // 30 days
 
   res.json({
@@ -464,7 +512,6 @@ app.post("/refresh", async (req, res) => {
   });
 });
 
-
 app.get("/dashboard", async (req, res) => {
   const clients = Object.entries(clientApps);
 
@@ -504,8 +551,6 @@ app.get("/dashboard", async (req, res) => {
 
   res.render("dashboard", { clients: clientStatusList });
 });
-
-
 
 // Verify token and return user info
 app.get(
@@ -626,8 +671,6 @@ app.post("/notify-logout", async (req, res) => {
 
   // const globalSessio = await getTokenFromRedis(`global_session_${user_id}`);
   // console.log("global session after logout",globalSessio);
-
-  
 
   // res.json({ success: true });
 
