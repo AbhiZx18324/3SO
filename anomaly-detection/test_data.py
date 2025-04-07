@@ -57,7 +57,7 @@ def generate_anomaly_detection_df(num_rows=100):
 
     return df
 
-df = generate_anomaly_detection_df(1000)
+df = generate_anomaly_detection_df(10000)
 filepath = "data/test_log.csv"
 
 try:
