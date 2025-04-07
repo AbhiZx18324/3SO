@@ -18,6 +18,7 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
             return
 
         df_new = pd.DataFrame(data)
+        df_new = df_new.drop_duplicates(subset='Datetime', keep='first')
 
         df_new["Datetime"] = pd.to_datetime(df_new["Datetime"])
 

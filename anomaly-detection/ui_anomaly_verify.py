@@ -21,10 +21,7 @@ if st.button("📥 Fetch Data from Server"):
     with st.spinner("Fetching latest login data..."):
         try:
             new_count = fetch_and_update(LOGS_URL, LOGS_FILE)
-            if not new_count:
-                st.info("✅ No new records were added.")
-            else:
-                st.success(f"✅ Successfully added {new_count} new records to {LOGS_FILE}")
+            st.success(f"✅ Successfully fetched")
         except Exception as e:
             st.error("❌ Failed to fetch data.")
             st.exception(e)
