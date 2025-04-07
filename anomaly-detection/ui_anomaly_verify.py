@@ -1,26 +1,38 @@
 import streamlit as st
 import pandas as pd
 import os
-from routine import routine
+from utils.routine import routine
+from utils.fetch_data import fetch_and_update
 
 RULES_FILE = os.getenv("RULES_FILE", "rules.txt")
-LOG_FILE = os.getenv("LOG_FILE", "data/test_log.csv")
-RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/test_results.csv")
+LOGS_FILE = os.getenv("LOGS_FILE", "data/logs.csv")
+LOGS_URL = os.getenv("LOGS_URL", "http://localhost:3000/admin/logins")
+RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/rb_results.csv")
 RB_ANOMALIES_FILE = os.getenv("RB_ANOMALIES_FILE", "data/rb_anomalies.csv")
 ML_ANOMALIES_FILE = os.getenv("ML_ANOMALIES_FILE", "data/ml_anomalies.csv")
 
 st.set_page_config(page_title="Anomaly Verifier", layout="wide")
 st.title("🧠 Expert Anomaly Verification UI")
 
-# Track if pipeline has been run
 if "pipeline_ran" not in st.session_state:
     st.session_state.pipeline_ran = False
 
-# Button to run anomaly detection
+if st.button("📥 Fetch Data from Server"):
+    with st.spinner("Fetching latest login data..."):
+        try:
+            new_count = fetch_and_update(LOGS_URL, LOGS_FILE)
+            if not new_count:
+                st.info("✅ No new records were added.")
+            else:
+                st.success(f"✅ Successfully added {new_count} new records to {LOGS_FILE}")
+        except Exception as e:
+            st.error("❌ Failed to fetch data.")
+            st.exception(e)
+
 if st.button("🚀 Run Anomaly Detection Pipeline"):
     with st.spinner("Running anomaly detection..."):
         try:
-            routine(RULES_FILE, LOG_FILE, RB_RESULT_FILE, RB_ANOMALIES_FILE, ML_ANOMALIES_FILE)
+            routine(RULES_FILE, LOGS_FILE, RB_RESULT_FILE, RB_ANOMALIES_FILE, ML_ANOMALIES_FILE)
             st.success("Anomaly detection completed! CSVs generated.")
             st.session_state.pipeline_ran = True
             st.rerun()  # Force rerun so the next part loads
@@ -49,15 +61,16 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     key=idx,
                     index=0
                 )
+
                 filtered.at[idx, "Expert_Verification"] = choice
                 if choice == "True Threat":
-                    row['Anomaly'] = True
+                    filtered.at[idx, 'Anomaly'] = True
                 elif choice == "False Positive":
-                    row['Anomaly'] = False
+                    filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies"):
-            filtered.to_csv("ml_verified_anomalies.csv", index=False)
-            st.success("✅ Saved to ml_verified_anomalies.csv")
+            filtered.to_csv("data/verified/ml_verified_anomalies.csv", index=False)
+            st.success("✅ Saved to data/verified/ml_verified_anomalies.csv")
 
     st.subheader("🔍 Rule Based Predicted Anomalies")
     filtered = rb_df[rb_df["Anomaly"] == True].reset_index(drop=True)
@@ -77,13 +90,10 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                 )
                 filtered.at[idx, "Expert_Verification"] = choice
                 if choice == "True Threat":
-                    row['Anomaly'] = True
+                    filtered.at[idx, 'Anomaly'] = True
                 elif choice == "False Positive":
-                    row['Anomaly'] = False
+                    filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies", key = len(ml_df) + len(rb_df)):
-            filtered.to_csv("rb_verified_anomalies.csv", index=False)
-            st.success("✅ Saved to rb_verified_anomalies.csv")
-
-else:
-    st.warning("⚠️ Please run the anomaly detection pipeline to generate CSVs.")
+            filtered.to_csv("data/verified/rb_verified_anomalies.csv", index=False)
+            st.success("✅ Saved to data/verified/rb_verified_anomalies.csv")

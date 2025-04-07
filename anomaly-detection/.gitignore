@@ -1,8 +1,12 @@
 .venv/
 __pycache__/
 rule_engine/__pycache__/
+ml_verified_anomalies.csv
+rb_verified_anomalies.csv
 test_log.csv
 test_results.csv
 anomalies.csv
 ml_anomalies.csv
 rb_anomalies.csv
+logs.csv
+rb_results.csv
