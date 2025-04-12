@@ -28,11 +28,11 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
             last_time = df_existing["Datetime"].max()
 
             df_to_add = df_new[df_new["Datetime"] > last_time]
-            added = len(df_to_add)
+            added = len(df_to_add) if len(df_to_add) else 0
 
             if df_to_add.empty:
                 print("No new records to append.")
-                return
+                return 0
 
             df_updated = pd.concat([df_existing, df_to_add], ignore_index=True)
         else:
