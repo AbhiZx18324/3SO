@@ -15,7 +15,7 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
 
         if not data:
             print("No data received from the endpoint.")
-            return
+            return 0
 
         df_new = pd.DataFrame(data)
         df_new = df_new.drop_duplicates(subset='Datetime', keep='first')
@@ -29,6 +29,7 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
 
             df_to_add = df_new[df_new["Datetime"] > last_time]
             added = len(df_to_add)
+
             if df_to_add.empty:
                 print("No new records to append.")
                 return
@@ -36,7 +37,9 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
             df_updated = pd.concat([df_existing, df_to_add], ignore_index=True)
         else:
             df_updated = df_new
-
+            added = len(df_updated)
+        
+        df_updated.sort_index(inplace=True)
         df_updated.to_csv(LOGS_FILE, index=False)
         print(f"Updated {LOGS_FILE} with {len(df_updated)} total records.")
 
@@ -44,5 +47,3 @@ def fetch_and_update(LOGS_URL : str = LOGS_URL, LOGS_FILE : str = LOGS_FILE):
         print("Error:", e)
     
     return added
-
-fetch_and_update()
