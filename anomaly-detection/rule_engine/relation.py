@@ -30,5 +30,5 @@ class RelationRule:
                     match_series.loc[window_df.index] = True
 
             start_time = window_end
-
+        df.sort_index(inplace=True)
         return match_series
