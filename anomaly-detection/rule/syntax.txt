@@ -1,0 +1,87 @@
+📜 Rule Syntax Guide
+
+This document defines the three kinds of rules used in the anomaly detection system: Plain Rules, Relation Rules, and Time Rules.
+
+1. ✅ Plain Rule
+
+A Plain Rule is used to define simple threshold or pattern-based conditions.
+
+🔹 Syntax
+
+NAME=<rule_name>;KEY1=VAL1;KEY2=VAL2;...;[RESET=X,Y];[INTERVAL=HH:MM:SS-HH:MM:SS];[EVENTS > X];[WITH_DETAILS];
+
+🔹 Keywords
+
+NAME — Name of the rule.
+
+PROCESS, FKL-PROCESS, USER — Keywords representing fields in the log data.
+
+USER supports regex values like ^[JS].* to match usernames.
+
+🔹 Parameters
+
+RESET=X,Y — Reset the rule after a period. Y can be MINUTE, HOUR, DAY, or WEEK.
+
+INTERVAL=HH:MM:SS-HH:MM:SS — Time window in which the rule is valid.
+
+EVENTS > X or EVENTS < X — Trigger only after more/less than X satisfactions.
+
+WITH_DETAILS — Include matching log lines in the output.
+
+🔹 Example
+
+NAME=Rule1;PROCESS=LOGIN;FKL-PROCESS=8,16;USER=^[JS].*;RESET=1,DAY;INTERVAL=20:30:00-07:00:00;
+
+2. 🔗 Relation Rule
+
+A Relation Rule defines a ratio between two plain rules over a time interval.
+
+🔹 Syntax
+
+NAME=<rule_name>;FIRST(<plain_rule_1>)SECOND(<plain_rule_2>)RESET=X,Y;[WITH_DETAILS];
+
+🔹 Keywords & Parameters
+
+FIRST(...) — A plain rule defining the numerator.
+
+SECOND(...) — A plain rule defining the denominator.
+
+RESET=X,Y — Time interval for computing the ratio (e.g., 4,HOUR).
+
+WITH_DETAILS — Show all related events in output.
+
+🔹 Example
+
+NAME=Relation1;FIRST(NAME=FailLogin;PROCESS=LOGIN;FKL-PROCESS=8,16;)SECOND(NAME=Login;PROCESS=LOGIN;)RESET=4,HOUR;
+
+3. ⏱ Time Rule
+
+A Time Rule tracks sequences of events. If one condition (IF) happens and another condition (KEIN or THEN) does/does not happen within a time window (IN), it is marked anomalous.
+
+🔹 Syntax
+
+NAME=<rule_name>;IF(<plain_rule_1>)THEN(<plain_rule_2>)IN(X;Y);[WITH_DETAILS];
+
+🔹 Parameters
+
+IF(...) — Trigger rule based on a user event.
+
+THEN(...) — Expect a matching event after IF.
+
+IN(X,Y) — Time window after IF (e.g., 5;MIN means 5 minutes).
+
+WITH_DETAILS — Include event trace.
+
+EVENTS > X — Threshold for alerts.
+
+🔹 Example
+
+NAME=Time1;IF(PROCESS=LOGIN;FKL-PROCESS=8,16;USER=^[QSJ].*)KEIN(PROCESS=LOGIN;FKL-PROCESS=0,2;USER=^[QSJ].*) IN (5;MIN);
+
+✅ Notes
+
+Rules must be written in one line.
+
+Use semicolons (;) to separate fields.
+
+Fields and values are case-sensitive.

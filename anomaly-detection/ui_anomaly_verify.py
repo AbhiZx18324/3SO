@@ -4,7 +4,7 @@ import os
 from utils.routine import routine
 from utils.fetch_data import fetch_and_update
 
-RULES_FILE = os.getenv("RULES_FILE", "rules.txt")
+RULES_FILE = os.getenv("RULES_FILE", "rule/rules.txt")
 LOGS_FILE = os.getenv("LOGS_FILE", "data/logs.csv")
 LOGS_URL = os.getenv("LOGS_URL", "http://host.docker.internal:3000/admin/logins")
 RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/rb_results.csv")
