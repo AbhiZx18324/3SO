@@ -10,6 +10,8 @@ LOGS_URL = os.getenv("LOGS_URL", "http://localhost:3000/admin/logins")
 RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/rb_results.csv")
 RB_ANOMALIES_FILE = os.getenv("RB_ANOMALIES_FILE", "data/rb_anomalies.csv")
 ML_ANOMALIES_FILE = os.getenv("ML_ANOMALIES_FILE", "data/ml_anomalies.csv")
+ML_VERIFIED_ANOMALIES = os.getenv("ML_VERIFIED_ANOMALIES", "data/verified/ml_verified_anomalies.csv")
+RB_VERIFIED_ANOMALIES = os.getenv("RB_VERIFIED_ANOMALIES", "data/verified/rb_verified_anomalies.csv")
 
 st.set_page_config(page_title="Anomaly Verifier", layout="wide")
 st.title("🧠 Expert Anomaly Verification UI")
@@ -21,7 +23,7 @@ if st.button("📥 Fetch Data from Server"):
     with st.spinner("Fetching latest login data..."):
         try:
             new_count = fetch_and_update(LOGS_URL, LOGS_FILE)
-            st.success(f"✅ Successfully fetched")
+            st.success(f"✅ Successfully added {new_count} entries to {LOGS_FILE}")
         except Exception as e:
             st.error("❌ Failed to fetch data.")
             st.exception(e)
@@ -66,8 +68,8 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies"):
-            filtered.to_csv("data/verified/ml_verified_anomalies.csv", index=False)
-            st.success("✅ Saved to data/verified/ml_verified_anomalies.csv")
+            filtered.to_csv(ML_VERIFIED_ANOMALIES, index=False)
+            st.success(f"✅ Saved to {ML_VERIFIED_ANOMALIES}")
 
     st.subheader("🔍 Rule Based Predicted Anomalies")
     filtered = rb_df[rb_df["Anomaly"] == True].reset_index(drop=True)
@@ -92,5 +94,5 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies", key = len(ml_df) + len(rb_df)):
-            filtered.to_csv("data/verified/rb_verified_anomalies.csv", index=False)
-            st.success("✅ Saved to data/verified/rb_verified_anomalies.csv")
+            filtered.to_csv(RB_VERIFIED_ANOMALIES, index=False)
+            st.success(f"✅ Saved to {RB_VERIFIED_ANOMALIES}")
