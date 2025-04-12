@@ -68,7 +68,8 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies"):
-            filtered.to_csv(ML_VERIFIED_ANOMALIES, index=False)
+            filtered.set_index('Datetime', inplace=True)
+            filtered.to_csv(ML_VERIFIED_ANOMALIES, index=True)
             st.success(f"✅ Saved to {ML_VERIFIED_ANOMALIES}")
 
     st.subheader("🔍 Rule Based Predicted Anomalies")
@@ -94,5 +95,6 @@ if st.session_state.pipeline_ran and os.path.exists(ML_ANOMALIES_FILE) and os.pa
                     filtered.at[idx, 'Anomaly'] = False
 
         if st.button("💾 Save Verified Anomalies", key = len(ml_df) + len(rb_df)):
-            filtered.to_csv(RB_VERIFIED_ANOMALIES, index=False)
+            filtered.set_index('Datetime', inplace=True)
+            filtered.to_csv(RB_VERIFIED_ANOMALIES, index=True)
             st.success(f"✅ Saved to {RB_VERIFIED_ANOMALIES}")

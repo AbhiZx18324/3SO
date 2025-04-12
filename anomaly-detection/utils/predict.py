@@ -31,11 +31,11 @@ def predict_anomalies(result_file : str) -> pd.DataFrame:
         failed_logins=("is_failed", "sum"),
         Rule1=("Rule1", "any"),
         Time1=("Time1", "any"),
-    ).reset_index()
+    )
 
     df["fail_ratio"] = df["failed_logins"] / df["total_logins"]
-    df['hour'] = df['Datetime'].dt.hour
-    df['dayofweek'] = df['Datetime'].dt.dayofweek
+    df['hour'] = df.index.hour
+    df['dayofweek'] = df.index.dayofweek
 
     features = ['total_logins', 'failed_logins', 'fail_ratio', 'Rule1', 'Time1', 'hour', 'dayofweek']
     X = df[features].copy()
