@@ -6,7 +6,7 @@ from utils.fetch_data import fetch_and_update
 
 RULES_FILE = os.getenv("RULES_FILE", "rules.txt")
 LOGS_FILE = os.getenv("LOGS_FILE", "data/logs.csv")
-LOGS_URL = os.getenv("LOGS_URL", "http://localhost:3000/admin/logins")
+LOGS_URL = os.getenv("LOGS_URL", "http://host.docker.internal:3000/admin/logins")
 RB_RESULT_FILE = os.getenv("RB_RESULT_FILE", "data/rb_results.csv")
 RB_ANOMALIES_FILE = os.getenv("RB_ANOMALIES_FILE", "data/rb_anomalies.csv")
 ML_ANOMALIES_FILE = os.getenv("ML_ANOMALIES_FILE", "data/ml_anomalies.csv")
