@@ -4,7 +4,7 @@ This project is part of the **3SO (Single Sign-On Security Operations)** suite a
 
 ---
 
-<details> <summary>📂 Project Structure</summary>
+<summary>📂 Project Structure</summary>
 ```
 anomaly-detection/
 ├── rule/                  # Contains manually written rules and syntax reference
