@@ -65,7 +65,7 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/3SO/anomaly-detection.git](https://github.com/3SO/anomaly-detection.git)
+   git clone https://github.com/3SO/anomaly-detection.git
    cd anomaly-detection
    ```
 2. **Build Docker Image**
@@ -78,4 +78,31 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
     ```
     Access URL at: [http://localhost:8501](http://localhost:8501)
 
+## 🧠 Model Training (Optional)
+
+To retrain the ML model:
+
+1. You can generate synthetic data using `test_data.py` for initial experimentation and training.
+2. Alternatively, the model can be trained on accumulated real data since the application's first run.
+
+⚠️ **Note:** Ensure the collected data is of good quality—ideally over 10,000 datapoints with a reasonable distribution of anomalies—to help the model generalize effectively.
+
+3. Train the model using the `model.ipynb` notebook.
+4. Save the updated model and scaler in `utils/ML/`.
+
+## 🧪 Rule Writing Guide
+
+* Use `syntax.txt` as a reference for writing valid rules.
+* Add your rules in `rules.txt`.
+* Rules are parsed and executed using the `rule_engine` modules.
+
+## ✅ Expert Verification
+
+After anomaly detection:
+
+1. Launch the UI.
+2. Fetch new data or run detection.
+3. Verify flagged events and store human-confirmed anomalies.
+
+This process helps improve accuracy and robustness over time.
 
