@@ -39,6 +39,11 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
         └── svm_model.pkl        # Trained SVM model for anomaly detection
 ```
 
+# 🧩 System Architecture
+
+![Component Diagram](UML.png)
+
+
 # Key Features
 
 * **🔍 Rule-Based Detection:** Leverages manually crafted rules from `rules.txt` to analyze log data.
