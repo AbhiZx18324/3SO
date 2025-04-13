@@ -58,5 +58,24 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 | `RB_RESULT_FILE`        | `data/rb_results.csv`            | Rule-based detection result                            |
 | `RB_ANOMALIES_FILE`     | `data/rb_anomalies.csv`          | Rule-based anomalies                                   |
 | `ML_ANOMALIES_FILE`     | `data/ml_anomalies.csv`          | ML-based anomalies                                      |
-| `ML_VERIFIED_ANOMALIES` | `data/verified/ml_verified_anomalies.csv` | Verified ML anomalies                                 |
-| `RB_VERIFIED_ANOMALIES` | `data/verified/rb_verified_anomalies.csv` | Verified rule-based anomalies                         |
+| `ML_VERIFIED_ANOMALIES` | `data/verified/ml_verified_anomalies.csv` | Expert Verified ML anomalies                                 |
+| `RB_VERIFIED_ANOMALIES` | `data/verified/rb_verified_anomalies.csv` | Expert Verified rule-based anomalies                         |
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/3SO/anomaly-detection.git](https://github.com/3SO/anomaly-detection.git)
+   cd anomaly-detection
+   ```
+2. **Build Docker Image**
+    ```bash
+    docker build -t anomaly-detector .
+    ```
+3. **Run Docker Container**
+    ```bash
+    docker run -p 8501:8501 --add-host=host.internal.docker:host-gateway anomaly-detector
+    ```
+    Access URL at: [http://localhost:8501](http://localhost:8501)
+
+
