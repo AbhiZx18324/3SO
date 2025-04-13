@@ -44,7 +44,7 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 ![Component Diagram](UML.png)
 
 
-# Key Features
+# 📌 Key Features
 
 * **🔍 Rule-Based Detection:** Leverages manually crafted rules from `rules.txt` to analyze log data.
 * **🤖 ML-Based Detection:** Employs a pretrained SVM model for anomaly identification based on learned feature patterns.
@@ -53,7 +53,7 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 * **🧪 Synthetic Data Generation:** Provides `test_data.py` for generating realistic dummy data for development and training purposes.
 * **📦 Docker Support:** Fully containerized with Docker for streamlined deployment.
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 | Variable                | Default                          | Description                                            |
 |-------------------------|----------------------------------|--------------------------------------------------------|
