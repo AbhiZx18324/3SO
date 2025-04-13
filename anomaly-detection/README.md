@@ -1,37 +1,40 @@
-# 🛡️ 3SO Anomaly Detection System
+# 🛡️ Anomaly Detection System
 
-This project is part of the **3SO (Single Sign-On Security Operations)** suite and provides a robust rule-based and machine learning-assisted anomaly detection framework for login attempts. It combines domain-specific rule evaluation, anomaly scoring, and an expert-verification UI to ensure a reliable security posture.
+A rule-based and machine learning-assisted anomaly detection system tailored to identify suspicious login attempts. This system supports expert verification through an interactive UI and can fetch logs in real-time or simulate them for model training and evaluation.
 
----
-
-<summary>📂 Project Structure</summary>
-```
-anomaly-detection/
-├── rule/                  # Contains manually written rules and syntax reference
-│   ├── rules.txt
-│   └── syntax.txt
+## 📁 Project Structure
+```bash
+3SO/anomaly-detection/
+├── .gitignore
+├── Dockerfile
+├── requirements.txt
+├── ui_anomaly_verify.py          # Streamlit UI for anomaly verification
 │
-├── rule_engine/           # Logic to parse and apply rules (plain, relation, time)
+├── data/                         # Stores raw logs and anomaly results
+│   └── verified/                 # Stores verified anomalies (human-verified)
+│       └── .gitkeep
+│
+├── rule/
+│   ├── rules.txt                 # Human-defined rules for detecting anomalies
+│   └── syntax.txt                # Syntax documentation for writing rules
+│
+├── rule_engine/                 # Parses and creates rule objects
 │   ├── factory.py
 │   ├── plain.py
 │   ├── relation.py
-│   └── time.py
+│   ├── time.py
+│   └── __init__.py
 │
-├── utils/                 # Helper modules for data fetching, detection, prediction
-│   ├── detectorRB.py
-│   ├── fetch_data.py
-│   ├── flag_anomaly.py
-│   ├── predict.py
-│   ├── routine.py
-│   ├── savefile.py
-│   └── ML/                # Pre-trained ML models and scaler
-│       ├── scaler.pkl
-│       └── svm_model.pkl
-│
-├── data/                  # Input data and output results (CSV)
-│   └── verified/          # Manually verified anomalies
-│
-├── ui_anomaly_verify.py   # Streamlit app for anomaly verification
-├── requirements.txt
-└── Dockerfile
+└── utils/                       # Utility modules and ML components
+    ├── detectorRB.py            # Applies rules to logs
+    ├── fetch_data.py            # Fetches logs from external URL
+    ├── flag_anomaly.py          # Tags anomalies using various logic
+    ├── model.ipynb              # Jupyter notebook for training the ML model
+    ├── predict.py               # Uses pretrained ML model to flag anomalies
+    ├── routine.py               # Workflow orchestration
+    ├── savefile.py              # Saves intermediate CSVs
+    ├── test_data.py             # Generates synthetic log data
+    └── ML/
+        ├── scaler.pkl           # Scaler used during training
+        └── svm_model.pkl        # Trained SVM model for anomaly detection
 ```
