@@ -39,15 +39,11 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
         └── svm_model.pkl        # Trained SVM model for anomaly detection
 ```
 
-# 📌 Key Features
-    - 🔍 <b>Rule-Based Detection:</b> Manually written rules in rules.txt are parsed and applied on log data.
+## Key Features
 
-    - 🤖 ML-Based Detection: Pretrained SVM model used to identify anomalies based on feature patterns.
-
-    - 🧑‍💻 Expert Feedback Loop: A UI (ui_anomaly_verify.py) for manual verification and feedback collection.
-
-    - 🌐 Data Fetching: Logs can be fetched dynamically from a given endpoint (LOGS_URL).
-
-    - 🧪 Synthetic Data Generation: test_data.py allows creating realistic dummy data for early development/training.
-
-    - 📦 Docker Support: Fully containerized using Docker for easy deployment.
+* **🔍 Rule-Based Detection:** Leverages manually crafted rules from `rules.txt` to analyze log data.
+* **🤖 ML-Based Detection:** Employs a pretrained SVM model for anomaly identification based on learned feature patterns.
+* **🧑‍💻 Expert Feedback Loop:** Includes a user interface (`ui_anomaly_verify.py`) for manual review and feedback integration.
+* **🌐 Data Fetching:** Enables dynamic retrieval of logs from a specified endpoint (`LOGS_URL`).
+* **🧪 Synthetic Data Generation:** Provides `test_data.py` for generating realistic dummy data for development and training purposes.
+* **📦 Docker Support:** Fully containerized with Docker for streamlined deployment.
