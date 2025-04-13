@@ -65,8 +65,8 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/3SO/anomaly-detection.git
-   cd anomaly-detection
+   git clone https://github.com/AbhiZx18324/3SO.git
+   cd 3SO/anomaly-detection
    ```
 2. **Build Docker Image**
     ```bash
