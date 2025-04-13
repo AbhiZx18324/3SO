@@ -85,7 +85,7 @@ To retrain the ML model:
 1. You can generate synthetic data using `test_data.py` for initial experimentation and training.
 2. Alternatively, the model can be trained on accumulated real data since the application's first run.
 
-⚠️ **Note:** Ensure the collected data is of good quality—ideally over 10,000 datapoints with a reasonable distribution of anomalies—to help the model generalize effectively.
+> ⚠️ **Note:** Ensure the collected data is of good quality—ideally over 10,000 datapoints with a reasonable distribution of anomalies—to help the model generalize effectively.
 
 3. Train the model using the `model.ipynb` notebook.
 4. Save the updated model and scaler in `utils/ML/`.
