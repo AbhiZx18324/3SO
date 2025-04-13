@@ -39,7 +39,7 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
         └── svm_model.pkl        # Trained SVM model for anomaly detection
 ```
 
-## Key Features
+# Key Features
 
 * **🔍 Rule-Based Detection:** Leverages manually crafted rules from `rules.txt` to analyze log data.
 * **🤖 ML-Based Detection:** Employs a pretrained SVM model for anomaly identification based on learned feature patterns.
@@ -47,3 +47,16 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
 * **🌐 Data Fetching:** Enables dynamic retrieval of logs from a specified endpoint (`LOGS_URL`).
 * **🧪 Synthetic Data Generation:** Provides `test_data.py` for generating realistic dummy data for development and training purposes.
 * **📦 Docker Support:** Fully containerized with Docker for streamlined deployment.
+
+## Environment Variables
+
+| Variable                | Default                          | Description                                            |
+|-------------------------|----------------------------------|--------------------------------------------------------|
+| `RULES_FILE`            | `rule/rules.txt`                 | Path to rule definitions                               |
+| `LOGS_FILE`             | `data/logs.csv`                  | Fallback log file location                             |
+| `LOGS_URL`              | `http://host.docker.internal:3000/admin/logins` | Endpoint to fetch login logs                           |
+| `RB_RESULT_FILE`        | `data/rb_results.csv`            | Rule-based detection result                            |
+| `RB_ANOMALIES_FILE`     | `data/rb_anomalies.csv`          | Rule-based anomalies                                   |
+| `ML_ANOMALIES_FILE`     | `data/ml_anomalies.csv`          | ML-based anomalies                                      |
+| `ML_VERIFIED_ANOMALIES` | `data/verified/ml_verified_anomalies.csv` | Verified ML anomalies                                 |
+| `RB_VERIFIED_ANOMALIES` | `data/verified/rb_verified_anomalies.csv` | Verified rule-based anomalies                         |
