@@ -5,6 +5,7 @@ This project is part of the **3SO (Single Sign-On Security Operations)** suite a
 ---
 
 <details> <summary>📂 Project Structure</summary>
+```
 anomaly-detection/
 ├── rule/                  # Contains manually written rules and syntax reference
 │   ├── rules.txt
@@ -33,3 +34,4 @@ anomaly-detection/
 ├── ui_anomaly_verify.py   # Streamlit app for anomaly verification
 ├── requirements.txt
 └── Dockerfile
+```
