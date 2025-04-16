@@ -39,7 +39,7 @@ A rule-based and machine learning-assisted anomaly detection system tailored to 
         └── svm_model.pkl        # Trained SVM model for anomaly detection
 ```
 
-# 🧩 System Architecture
+# 🧩 System Diagram
 
 ![Component Diagram](UML_AD.png)
 

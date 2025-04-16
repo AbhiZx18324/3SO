@@ -2,7 +2,7 @@
 
 A complete Single Sign-On (SSO) solution with multi-client support, token-based authentication, and Redis session management.
 
-# 🧩 System Architecture
+# 🧩 System Diagram
 
 ![Component Diagram](UML_SSO.png)
 
@@ -50,8 +50,8 @@ OneLogin-SSO-Server/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd onelogin-sso-server
+   git clone https://github.com/AbhiZx18324/3SO.git
+   cd 3SO/sso_server_client
    ```
 
 2. Install dependencies:

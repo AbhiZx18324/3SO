@@ -11,7 +11,7 @@ The system consists of two main parts:
 
 The integration point is the Anomaly Detection system's ability to fetch data directly from the SSO server's designated log endpoint (`/admin/logins` by default), enabling near real-time monitoring of authentication events.
 
-## Overall Architecture
+## System Diagram
 
 ![Architecture](UML_ALL.png)
 
@@ -65,46 +65,38 @@ You need to set up and run both systems.
 
 **1. Setup and Run the SSO Server:**
 
-   a. Clone the SSO Server repository (assuming it's separate):
-      ```bash
-      git clone <sso-server-repository-url>
-      cd <sso-server-directory>
-      ```
-   b. Install dependencies:
-      ```bash
-      npm install
-      ```
-   c. Ensure your Redis server is running. Configure the connection if needed (default `REDIS_URL=redis://localhost:6379`).
-   d. Start the main SSO Server (Identity Provider). By default, it runs on port `3000`:
-      ```bash
-      # Make sure idp.js is configured to expose logs at /admin/logins
-      nodemon idp.js
-      ```
-   e. In separate terminals, start any client applications required for testing:
-      ```bash
-      nodemon client1.js # Typically runs on port 3001
-      nodemon client2.js # Typically runs on port 3002
-      ```
-   f. **Verify:** Ensure the SSO server is running and that you can access the login log endpoint (e.g., `http://localhost:3000/admin/logins`) and see login data after performing some logins.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/AbhiZx18324/3SO.git
+   cd 3SO/sso_server_client
+   ```
 
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure Redis connection in environment variables or use default:
+   ```
+   REDIS_URL=redis://localhost:6379
+   ```
+   
 **2. Setup and Run the Anomaly Detection System:**
 
-   a. Clone the Anomaly Detection repository:
-      ```bash
-      git clone [https://github.com/AbhiZx18324/3SO.git](https://github.com/AbhiZx18324/3SO.git)
-      cd 3SO/anomaly-detection
-      ```
-   b. Build the Docker Image:
-      ```bash
-      docker build -t anomaly-detector .
-      ```
-   c. Run the Docker Container:
-      * This command maps the UI port (`8501`) and importantly uses `--add-host` to allow the container to reach the SSO server running on your host machine via `host.docker.internal`.
-      * The default `LOGS_URL` environment variable (`http://host.docker.internal:3000/admin/logins`) should now correctly point to your SSO server's log endpoint from within the container.
-      ```bash
-      docker run -p 8501:8501 --add-host=host.docker.internal:host-gateway anomaly-detector
-      ```
-   d. **Access the Anomaly Detection UI:** Open your web browser to `http://localhost:8501`.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/AbhiZx18324/3SO.git
+   cd 3SO/anomaly-detection
+   ```
+2. **Build Docker Image**
+    ```bash
+    docker build -t anomaly-detector .
+    ```
+3. **Run Docker Container**
+    ```bash
+    docker run -p 8501:8501 --add-host=host.internal.docker:host-gateway anomaly-detector
+    ```
+    Access URL at: [http://localhost:8501](http://localhost:8501)
 
 ## 🛠️ Configuration
 
