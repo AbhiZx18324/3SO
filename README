@@ -11,6 +11,10 @@ The system consists of two main parts:
 
 The integration point is the Anomaly Detection system's ability to fetch data directly from the SSO server's designated log endpoint (`/admin/logins` by default), enabling near real-time monitoring of authentication events.
 
+## Overall Architecture
+
+![Architecture](UML_ALL.png)
+
 ## ✨ Combined Features
 
 **SSO Server Features:**
