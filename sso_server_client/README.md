@@ -2,6 +2,10 @@
 
 A complete Single Sign-On (SSO) solution with multi-client support, token-based authentication, and Redis session management.
 
+# 🧩 System Architecture
+
+![Component Diagram](UML_SSO.png)
+
 ## 🚀 Features
 
 - **Single Sign-On** - Log in once and access all connected applications
