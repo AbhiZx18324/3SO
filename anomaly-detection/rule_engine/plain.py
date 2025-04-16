@@ -29,6 +29,7 @@ class PlainRule:
                 cond &= (start_t <= t_only) & (t_only <= end_t)
             else:
                 cond &= (t_only >= start_t) | (t_only <= end_t) # crosses midnight
-
+        
         df.sort_index(inplace=True)
+        cond.sort_index(inplace=True)
         return cond
